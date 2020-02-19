@@ -1,14 +1,6 @@
-function shuffle(a) {
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
 function conquer(max, items, i, res, best) {
   const n = res.reduce((a, c) => a + items[c], 0);
-  if (n > best.n && n < max) {
+  if (n > best.n && n <= max && i < items.length) {
     best.n = n;
     best.res = res;
   }
@@ -39,28 +31,20 @@ function divide(max, items, size) {
 function linear(max, items) {
   const res = [];
   let n = 0;
-  for (let i = items.length - 1; i >= 0 && n + items[i] < max; i -= 1) {
-    res.push(i);
-    n += items[i];
-  }
-  for (let i = 0; i < items.length && n + items[i] < max; i += 1) {
+  for (let i = items.length - 1; i >= 0; i -= 1) {
+    if (n + items[i] > max) continue;
     res.push(i);
     n += items[i];
   }
   return { n, res };
 }
 
-function linearDivideConquer(max, items) {
-  const res = [];
-  let n = 0,
-    i;
-  for (i = items.length - 1; i >= 0 && n + items[i] < max; i -= 1) {
-    res.push(i);
-    n += items[i];
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
   }
-  const best = { n, res };
-  conquer(max - n, items.slice(i), 0, [], best);
-  return best;
+  return a;
 }
 
 const readline = require("readline"),
@@ -86,10 +70,8 @@ rl.on("close", () => {
   console.log(max, items.length);
   //   console.log(items);
   const best1 = linear(max, items);
-  const best2 = linearDivideConquer(max, items);
-  const best3 = divide(max, shuffle(items), 8);
+  const best2 = divide(max, shuffle(shuffle(shuffle(items))), 10);
   console.log("Output:");
   console.log(best1.n, best1.res.length);
   console.log(best2.n, best2.res.length);
-  console.log(best3.n, best3.res.length);
 });
