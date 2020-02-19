@@ -92,6 +92,4 @@ rl.on("close", () => {
   console.log(best1.n, best1.res.length);
   console.log(best2.n, best2.res.length);
   console.log(best3.n, best3.res.length);
-  //   console.log(best1.res);
-  //   console.log(best2.res);
 });
